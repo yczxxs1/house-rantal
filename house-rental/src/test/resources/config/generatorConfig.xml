@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+  
+   <properties url="file:src/test/resources/config/generator.properties"/>  
+   
+  <context id="context1">
+  
+   <commentGenerator>
+   <property name="suppressDate" value="true"/>
+   <property name="suppressAllComments" value="true" />
+  </commentGenerator>
+  
+    <jdbcConnection connectionURL="${spring.datasource.url}"
+    driverClass="${spring.datasource.driver-class-name}" 
+    userId="${spring.datasource.username}" password="${spring.datasource.password}" />
+    
+    <javaTypeResolver >
+         <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+    
+    
+    <javaModelGenerator targetPackage="${model.package}" targetProject="${target.project}" >
+        <property name="enableSubPackages" value="true" />
+        <property name="trimStrings" value="true" />
+    </javaModelGenerator>
+    
+    <sqlMapGenerator targetPackage="${xml.package}" targetProject="${xml.target.project}" >
+        <property name="enableSubPackages" value="true" />
+    </sqlMapGenerator>
+    
+    <javaClientGenerator targetPackage="${dao.package}" targetProject="${target.project}" type="XMLMAPPER" >
+    <property name="enableSubPackages" value="true" />
+    </javaClientGenerator>
+    
+    <table tableName="${generator.tableName}"  
+    enableCountByExample="false" 
+    enableUpdateByExample="false" 
+    enableDeleteByExample="false" 
+    enableSelectByExample="false" 
+    selectByExampleQueryId="false" domainObjectName="${generator.domainObjectName}">
+    
+    
+    </table>
+    
+ 
+    
+  </context>
+  
+  
+</generatorConfiguration>
