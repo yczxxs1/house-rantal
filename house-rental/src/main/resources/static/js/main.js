@@ -162,7 +162,7 @@ function remove(a){
     alert(a);
 }
 
-//我要发布
+//删除
 $("#remove").on("click", function () {
 
     alert($("#rentalInfoId").html());
