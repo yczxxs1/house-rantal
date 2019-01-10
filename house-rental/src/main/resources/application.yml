@@ -5,11 +5,17 @@ spring:
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+
 mybatis:
-  config-location:
+  mapper-locations:
   - classpath:mapper/*.xml
+
+swagger:
+  title: 房屋租赁接口文档
+  version: 1.0.0
+  base-package: com.netflix.houserental
 
 logging:
   level:
-    com.kaituo.communitypolicing : debug
+    com.netflix.houserental : debug
 

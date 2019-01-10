@@ -3,10 +3,16 @@
 <mapper namespace="com.netflix.houserental.business.dao.RentalInfoMapper">
   <resultMap id="BaseResultMap" type="com.netflix.houserental.business.model.RentalInfo">
     <id column="rental_info_id" jdbcType="VARCHAR" property="rentalInfoId" />
+    <result column="house_name" jdbcType="VARCHAR" property="houseName" />
+    <result column="house_location" jdbcType="VARCHAR" property="houseLocation" />
     <result column="bedroom_num" jdbcType="INTEGER" property="bedroomNum" />
     <result column="living_room_num" jdbcType="INTEGER" property="livingRoomNum" />
     <result column="bathroom_num" jdbcType="INTEGER" property="bathroomNum" />
     <result column="house_type" jdbcType="VARCHAR" property="houseType" />
+    <result column="house_area" jdbcType="VARCHAR" property="houseArea" />
+    <result column="elevator" jdbcType="VARCHAR" property="elevator" />
+    <result column="house_rent" jdbcType="DOUBLE" property="houseRent" />
+    <result column="payment_method" jdbcType="VARCHAR" property="paymentMethod" />
     <result column="house_floor" jdbcType="INTEGER" property="houseFloor" />
     <result column="floor_num" jdbcType="INTEGER" property="floorNum" />
     <result column="parking_space" jdbcType="VARCHAR" property="parkingSpace" />
@@ -16,11 +22,14 @@
     <result column="house_contact_identity" jdbcType="VARCHAR" property="houseContactIdentity" />
     <result column="house_contact_phone" jdbcType="VARCHAR" property="houseContactPhone" />
     <result column="rental_info_user_id" jdbcType="VARCHAR" property="rentalInfoUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    rental_info_id, bedroom_num, living_room_num, bathroom_num, house_type, house_floor, 
-    floor_num, parking_space, house_desc, house_imgs, house_contact_name, house_contact_identity, 
-    house_contact_phone, rental_info_user_id
+    rental_info_id, house_name,house_location,bedroom_num, living_room_num, bathroom_num, house_type, house_area,
+    elevator, house_rent, payment_method, house_floor, floor_num, parking_space, house_desc, 
+    house_imgs, house_contact_name, house_contact_identity, house_contact_phone, rental_info_user_id, 
+    create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -28,21 +37,65 @@
     from rental_info
     where rental_info_id = #{rentalInfoId,jdbcType=VARCHAR}
   </select>
+
+  <select id="selectListByCondition"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from rental_info
+
+      <where>
+
+          <if test="minRent != null and minRent!=''">
+              <![CDATA[ AND house_rent > = #{minRent,jdbcType=VARCHAR}]]>
+
+          </if>
+
+          <if test="maxRent != null and maxRent!=''">
+              <![CDATA[  AND house_rent <=  #{maxRent,jdbcType=VARCHAR}]]>
+
+          </if>
+
+          <if test="bedroomNum != null and bedroomNum != '' ">
+              <![CDATA[  AND bedroom_num =  #{bedroomNum,jdbcType=VARCHAR}]]>
+
+          </if>
+
+          <if test="houseContactIdentity != null and houseContactIdentity != '' ">
+              <![CDATA[  AND house_contact_identity =  #{houseContactIdentity,jdbcType=VARCHAR}]]>
+
+          </if>
+
+          <if test="rentalInfoUserId != null and rentalInfoUserId !=''">
+              <![CDATA[  AND rental_info_user_id =  #{rentalInfoUserId,jdbcType=VARCHAR}]]>
+
+          </if>
+
+      </where>
+
+  </select>
+
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from rental_info
     where rental_info_id = #{rentalInfoId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.netflix.houserental.business.model.RentalInfo">
-    insert into rental_info (rental_info_id, bedroom_num, living_room_num, 
-      bathroom_num, house_type, house_floor, 
-      floor_num, parking_space, house_desc, 
-      house_imgs, house_contact_name, house_contact_identity, 
-      house_contact_phone, rental_info_user_id)
-    values (#{rentalInfoId,jdbcType=VARCHAR}, #{bedroomNum,jdbcType=INTEGER}, #{livingRoomNum,jdbcType=INTEGER}, 
-      #{bathroomNum,jdbcType=INTEGER}, #{houseType,jdbcType=VARCHAR}, #{houseFloor,jdbcType=INTEGER}, 
-      #{floorNum,jdbcType=INTEGER}, #{parkingSpace,jdbcType=VARCHAR}, #{houseDesc,jdbcType=VARCHAR}, 
-      #{houseImgs,jdbcType=VARCHAR}, #{houseContactName,jdbcType=VARCHAR}, #{houseContactIdentity,jdbcType=VARCHAR}, 
-      #{houseContactPhone,jdbcType=VARCHAR}, #{rentalInfoUserId,jdbcType=VARCHAR})
+    insert into rental_info (rental_info_id, house_name,house_location,bedroom_num, living_room_num,
+      bathroom_num, house_type, house_area, 
+      elevator, house_rent, payment_method, 
+      house_floor, floor_num, parking_space, 
+      house_desc, house_imgs, house_contact_name, 
+      house_contact_identity, house_contact_phone, 
+      rental_info_user_id, create_time, update_time
+      )
+    values (#{rentalInfoId,jdbcType=VARCHAR}, #{houseName,jdbcType=VARCHAR},#{houseLocation,jdbcType=VARCHAR},#{bedroomNum,jdbcType=INTEGER}, #{livingRoomNum,jdbcType=INTEGER},
+      #{bathroomNum,jdbcType=INTEGER}, #{houseType,jdbcType=VARCHAR}, #{houseArea,jdbcType=VARCHAR}, 
+      #{elevator,jdbcType=VARCHAR}, #{houseRent,jdbcType=DOUBLE}, #{paymentMethod,jdbcType=VARCHAR}, 
+      #{houseFloor,jdbcType=INTEGER}, #{floorNum,jdbcType=INTEGER}, #{parkingSpace,jdbcType=VARCHAR}, 
+      #{houseDesc,jdbcType=VARCHAR}, #{houseImgs,jdbcType=VARCHAR}, #{houseContactName,jdbcType=VARCHAR}, 
+      #{houseContactIdentity,jdbcType=VARCHAR}, #{houseContactPhone,jdbcType=VARCHAR}, 
+      #{rentalInfoUserId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.netflix.houserental.business.model.RentalInfo">
     insert into rental_info
@@ -61,6 +114,18 @@
       </if>
       <if test="houseType != null">
         house_type,
+      </if>
+      <if test="houseArea != null">
+        house_area,
+      </if>
+      <if test="elevator != null">
+        elevator,
+      </if>
+      <if test="houseRent != null">
+        house_rent,
+      </if>
+      <if test="paymentMethod != null">
+        payment_method,
       </if>
       <if test="houseFloor != null">
         house_floor,
@@ -89,6 +154,12 @@
       <if test="rentalInfoUserId != null">
         rental_info_user_id,
       </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="rentalInfoId != null">
@@ -105,6 +176,18 @@
       </if>
       <if test="houseType != null">
         #{houseType,jdbcType=VARCHAR},
+      </if>
+      <if test="houseArea != null">
+        #{houseArea,jdbcType=VARCHAR},
+      </if>
+      <if test="elevator != null">
+        #{elevator,jdbcType=VARCHAR},
+      </if>
+      <if test="houseRent != null">
+        #{houseRent,jdbcType=DOUBLE},
+      </if>
+      <if test="paymentMethod != null">
+        #{paymentMethod,jdbcType=VARCHAR},
       </if>
       <if test="houseFloor != null">
         #{houseFloor,jdbcType=INTEGER},
@@ -133,6 +216,12 @@
       <if test="rentalInfoUserId != null">
         #{rentalInfoUserId,jdbcType=VARCHAR},
       </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.netflix.houserental.business.model.RentalInfo">
@@ -149,6 +238,18 @@
       </if>
       <if test="houseType != null">
         house_type = #{houseType,jdbcType=VARCHAR},
+      </if>
+      <if test="houseArea != null">
+        house_area = #{houseArea,jdbcType=VARCHAR},
+      </if>
+      <if test="elevator != null">
+        elevator = #{elevator,jdbcType=VARCHAR},
+      </if>
+      <if test="houseRent != null">
+        house_rent = #{houseRent,jdbcType=DOUBLE},
+      </if>
+      <if test="paymentMethod != null">
+        payment_method = #{paymentMethod,jdbcType=VARCHAR},
       </if>
       <if test="houseFloor != null">
         house_floor = #{houseFloor,jdbcType=INTEGER},
@@ -177,6 +278,14 @@
       <if test="rentalInfoUserId != null">
         rental_info_user_id = #{rentalInfoUserId,jdbcType=VARCHAR},
       </if>
+
+      <if test="houseName != null">
+        house_name = #{houseName,jdbcType=VARCHAR},
+      </if>
+      <if test="houseLocation != null">
+        house_location = #{houseLocation,jdbcType=VARCHAR},
+      </if>
+
     </set>
     where rental_info_id = #{rentalInfoId,jdbcType=VARCHAR}
   </update>
@@ -186,6 +295,10 @@
       living_room_num = #{livingRoomNum,jdbcType=INTEGER},
       bathroom_num = #{bathroomNum,jdbcType=INTEGER},
       house_type = #{houseType,jdbcType=VARCHAR},
+      house_area = #{houseArea,jdbcType=VARCHAR},
+      elevator = #{elevator,jdbcType=VARCHAR},
+      house_rent = #{houseRent,jdbcType=DOUBLE},
+      payment_method = #{paymentMethod,jdbcType=VARCHAR},
       house_floor = #{houseFloor,jdbcType=INTEGER},
       floor_num = #{floorNum,jdbcType=INTEGER},
       parking_space = #{parkingSpace,jdbcType=VARCHAR},
@@ -194,7 +307,9 @@
       house_contact_name = #{houseContactName,jdbcType=VARCHAR},
       house_contact_identity = #{houseContactIdentity,jdbcType=VARCHAR},
       house_contact_phone = #{houseContactPhone,jdbcType=VARCHAR},
-      rental_info_user_id = #{rentalInfoUserId,jdbcType=VARCHAR}
+      rental_info_user_id = #{rentalInfoUserId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
     where rental_info_id = #{rentalInfoId,jdbcType=VARCHAR}
   </update>
 </mapper>

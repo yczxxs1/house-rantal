@@ -1,6 +1,7 @@
 package com.netflix.houserental.business.model;
 
 import java.util.Date;
+import java.util.UUID;
 
 public class User {
     private String userId;
@@ -12,6 +13,16 @@ public class User {
     private Date createTime;
 
     private Date updateTime;
+
+    public User(String userName, String password) {
+        this.userId=UUID.randomUUID().toString();
+        this.userName = userName;
+        this.password = password;
+        this.createTime = new Date();
+        this.updateTime = new Date();
+    }
+
+    public User(){ }
 
     public String getUserId() {
         return userId;

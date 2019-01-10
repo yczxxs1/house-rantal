@@ -1,60 +1,68 @@
-package com.netflix.houserental.business.model;
+package com.netflix.houserental.business.form;
 
-import java.util.Date;
-import java.util.UUID;
+import com.netflix.houserental.common.exception.ServiceException;
+import org.springframework.util.StringUtils;
 
-public class RentalInfo {
-    private String rentalInfoId;
+import javax.validation.constraints.NotEmpty;
 
+public class RentalInfoPostForm {
+
+    @NotEmpty
     private String houseName;
 
+    @NotEmpty
     private String houseLocation;
 
+    @NotEmpty
     private Integer bedroomNum;
 
+    @NotEmpty
     private Integer livingRoomNum;
 
+    @NotEmpty
     private Integer bathroomNum;
 
+    @NotEmpty
     private String houseType;
 
+    @NotEmpty
     private String houseArea;
 
+    @NotEmpty
     private String elevator;
 
+    @NotEmpty
     private Double houseRent;
 
+    @NotEmpty
     private String paymentMethod;
 
+    @NotEmpty
     private Integer houseFloor;
 
+    @NotEmpty
     private Integer floorNum;
 
+    @NotEmpty
     private String parkingSpace;
 
+    @NotEmpty
     private String houseDesc;
 
+    @NotEmpty
     private String houseImgs;
 
+    @NotEmpty
     private String houseContactName;
 
+    @NotEmpty
     private String houseContactIdentity;
 
+    @NotEmpty
     private String houseContactPhone;
 
+    @NotEmpty
     private String rentalInfoUserId;
-
-    private Date createTime;
-
-    private Date updateTime;
-
-
-    public RentalInfo() {
-        this.rentalInfoId=UUID.randomUUID().toString();
-        this.createTime=new Date();
-        this.updateTime=new Date();
-    }
-
 
     public String getHouseName() {
         return houseName;
@@ -72,12 +80,36 @@ public class RentalInfo {
         this.houseLocation = houseLocation;
     }
 
-    public String getRentalInfoId() {
-        return rentalInfoId;
+    public String getHouseArea() {
+        return houseArea;
     }
 
-    public void setRentalInfoId(String rentalInfoId) {
-        this.rentalInfoId = rentalInfoId == null ? null : rentalInfoId.trim();
+    public void setHouseArea(String houseArea) {
+        this.houseArea = houseArea;
+    }
+
+    public String getElevator() {
+        return elevator;
+    }
+
+    public void setElevator(String elevator) {
+        this.elevator = elevator;
+    }
+
+    public Double getHouseRent() {
+        return houseRent;
+    }
+
+    public void setHouseRent(Double houseRent) {
+        this.houseRent = houseRent;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 
     public Integer getBedroomNum() {
@@ -109,39 +141,7 @@ public class RentalInfo {
     }
 
     public void setHouseType(String houseType) {
-        this.houseType = houseType == null ? null : houseType.trim();
-    }
-
-    public String getHouseArea() {
-        return houseArea;
-    }
-
-    public void setHouseArea(String houseArea) {
-        this.houseArea = houseArea == null ? null : houseArea.trim();
-    }
-
-    public String getElevator() {
-        return elevator;
-    }
-
-    public void setElevator(String elevator) {
-        this.elevator = elevator == null ? null : elevator.trim();
-    }
-
-    public Double getHouseRent() {
-        return houseRent;
-    }
-
-    public void setHouseRent(Double houseRent) {
-        this.houseRent = houseRent;
-    }
-
-    public String getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod == null ? null : paymentMethod.trim();
+        this.houseType = houseType;
     }
 
     public Integer getHouseFloor() {
@@ -165,7 +165,7 @@ public class RentalInfo {
     }
 
     public void setParkingSpace(String parkingSpace) {
-        this.parkingSpace = parkingSpace == null ? null : parkingSpace.trim();
+        this.parkingSpace = parkingSpace;
     }
 
     public String getHouseDesc() {
@@ -173,7 +173,7 @@ public class RentalInfo {
     }
 
     public void setHouseDesc(String houseDesc) {
-        this.houseDesc = houseDesc == null ? null : houseDesc.trim();
+        this.houseDesc = houseDesc;
     }
 
     public String getHouseImgs() {
@@ -181,7 +181,7 @@ public class RentalInfo {
     }
 
     public void setHouseImgs(String houseImgs) {
-        this.houseImgs = houseImgs == null ? null : houseImgs.trim();
+        this.houseImgs = houseImgs;
     }
 
     public String getHouseContactName() {
@@ -189,7 +189,7 @@ public class RentalInfo {
     }
 
     public void setHouseContactName(String houseContactName) {
-        this.houseContactName = houseContactName == null ? null : houseContactName.trim();
+        this.houseContactName = houseContactName;
     }
 
     public String getHouseContactIdentity() {
@@ -197,7 +197,7 @@ public class RentalInfo {
     }
 
     public void setHouseContactIdentity(String houseContactIdentity) {
-        this.houseContactIdentity = houseContactIdentity == null ? null : houseContactIdentity.trim();
+        this.houseContactIdentity = houseContactIdentity;
     }
 
     public String getHouseContactPhone() {
@@ -205,7 +205,7 @@ public class RentalInfo {
     }
 
     public void setHouseContactPhone(String houseContactPhone) {
-        this.houseContactPhone = houseContactPhone == null ? null : houseContactPhone.trim();
+        this.houseContactPhone = houseContactPhone;
     }
 
     public String getRentalInfoUserId() {
@@ -213,22 +213,17 @@ public class RentalInfo {
     }
 
     public void setRentalInfoUserId(String rentalInfoUserId) {
-        this.rentalInfoUserId = rentalInfoUserId == null ? null : rentalInfoUserId.trim();
+        this.rentalInfoUserId = rentalInfoUserId;
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+    public void validate(){
+        if (StringUtils.isEmpty(getBathroomNum())
+                || StringUtils.isEmpty(getBedroomNum())
+                || StringUtils.isEmpty(getElevator())
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+                ) {
+            throw new ServiceException("the params are not correct!");
+        }
 
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 }

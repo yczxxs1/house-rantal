@@ -4,7 +4,6 @@
     <link rel="stylesheet" href="layui/css/layui.css" media="all">
     <link rel="stylesheet" href="css/main.css">
     <script src="layui/layui.js"></script>
-    <script src="js/main.js"></script>
     <meta charset="UTF-8">
     <title>我要发布</title>
 </head>
@@ -19,7 +18,7 @@
                 <dl class="layui-nav-child">
                     <dd><a href="javascript:viod(0);">我的发布</a></dd>
                     <dd><a href="javascript:viod(0);">修改信息</a></dd>
-                    <dd><a href="javascript:viod(0);">退出登录</a></dd>
+                    <dd><a href="javascript:viod(0);" id="quitFun" >退出登录</a></dd>
                 </dl>
             </li>
 
@@ -38,7 +37,7 @@
     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
         <legend>我要发布</legend>
     </fieldset>
-    <form class="layui-form" action="">
+    <form class="layui-form" id="myForm">
         <div class="layui-card">
             <div class="layui-card-header">基础信息</div>
             <div class="layui-card-body">
@@ -46,7 +45,16 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">小区名称:</label>
                     <div class="layui-input-block">
-                        <input type="text" name="title" required lay-verify="required" placeholder="请输入小区"
+                        <input type="text" name="houseName" required lay-verify="required" placeholder="请输入小区"
+                               autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">详细地址:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="houseLocation" required lay-verify="required" placeholder="请输入详细地址"
                                autocomplete="off"
                                class="layui-input">
                     </div>
@@ -56,22 +64,22 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">房屋类型:</label>
                         <div class="layui-input-inline">
-                            <input type="text" name="title" required lay-verify="required" autocomplete="off"
+                            <input type="text" name="bedroomNum" required lay-verify="required" autocomplete="off"
                                    class="layui-input">
                         </div>
                         <div class="layui-form-mid">室</div>
                         <div class="layui-input-inline">
-                            <input type="text" name="password" required lay-verify="required" autocomplete="off"
+                            <input type="text" name="livingRoomNum" required lay-verify="required" autocomplete="off"
                                    class="layui-input">
                         </div>
                         <div class="layui-form-mid">厅</div>
                         <div class="layui-input-inline">
-                            <input type="text" name="password" required lay-verify="required" autocomplete="off"
+                            <input type="text" name="bathroomNum" required lay-verify="required" autocomplete="off"
                                    class="layui-input">
                         </div>
                         <div class="layui-form-mid">卫</div>
                         <div class="layui-input-inline">
-                            <input type="text" name="password" required lay-verify="required" autocomplete="off"
+                            <input type="text" name="houseArea" required lay-verify="required" autocomplete="off"
                                    class="layui-input">
                         </div>
                         <div class="layui-form-mid">㎡</div>
@@ -83,20 +91,20 @@
                         <label class="layui-form-label">楼层:</label>
                         <div class="layui-form-mid">第</div>
                         <div class="layui-input-inline">
-                            <input type="text" name="password" required lay-verify="required" autocomplete="off"
+                            <input type="text" name="houseFloor" required lay-verify="required" autocomplete="off"
                                    class="layui-input">
                         </div>
                         <div class="layui-form-mid">层</div>
                         <div class="layui-form-mid">共</div>
                         <div class="layui-input-inline">
-                            <input type="text" name="password" required lay-verify="required" autocomplete="off"
+                            <input type="text" name="floorNum" required lay-verify="required" autocomplete="off"
                                    class="layui-input">
                         </div>
                         <div class="layui-form-mid">层</div>
                         <div class="layui-input-inline">
-                            <select name="city" lay-verify="required">
-                                <option value="0">无电梯</option>
-                                <option value="1">有电梯</option>
+                            <select name="elevator" lay-verify="required">
+                                <option value="无电梯">无电梯</option>
+                                <option value="有电梯">有电梯</option>
                             </select>
                         </div>
 
@@ -107,16 +115,16 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">租金:</label>
                         <div class="layui-input-inline">
-                            <input type="text" name="password" required lay-verify="required" autocomplete="off"
+                            <input type="text" name="houseRent" required lay-verify="required" autocomplete="off"
                                    class="layui-input">
                         </div>
                         <div class="layui-form-mid">元/月</div>
                         <div class="layui-input-inline">
-                            <select name="city" lay-verify="required">
-                                <option value="0">押一付一</option>
-                                <option value="1">押一付三</option>
-                                <option value="2">半年付</option>
-                                <option value="3">年付</option>
+                            <select name="paymentMethod" lay-verify="required">
+                                <option value="押一付一">押一付一</option>
+                                <option value="押一付三">押一付三</option>
+                                <option value="半年付">半年付</option>
+                                <option value="年付">年付</option>
                             </select>
                         </div>
                     </div>
@@ -125,9 +133,9 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">车位:</label>
                     <div class="layui-input-inline">
-                        <select name="city" lay-verify="required">
-                            <option value="0">无</option>
-                            <option value="1">有</option>
+                        <select name="parkingSpace" lay-verify="required">
+                            <option value="无">无</option>
+                            <option value="有">有</option>
                         </select>
                     </div>
                 </div>
@@ -135,11 +143,11 @@
                 <div class="layui-form-item layui-form-text">
                     <label class="layui-form-label">房源描述:</label>
                     <div class="layui-input-block">
-                        <textarea name="desc" placeholder="周围交通及生活配套..." class="layui-textarea"></textarea>
+                        <textarea name="houseDesc" placeholder="周围交通及生活配套..." class="layui-textarea"></textarea>
                     </div>
                 </div>
 
-                <div class="layui-form-item">
+              <!--  <div class="layui-form-item">
                     <label class="layui-form-label">上传图片:</label>
                     <div class="layui-input-block">
                         <div class="layui-upload">
@@ -150,14 +158,9 @@
                             </blockquote>
                         </div>
                     </div>
-                </div>
+                </div>-->
 
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
-                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-                    </div>
-                </div>
+
 
             </div>
         </div>
@@ -170,7 +173,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">联系人:</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="title" lay-verify="title" autocomplete="off"
+                        <input type="text" name="houseContactName" lay-verify="title" autocomplete="off"
                                class="layui-input">
                     </div>
                 </div>
@@ -178,10 +181,10 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">联系人身份:</label>
                     <div class="layui-input-inline">
-                        <select name="city" lay-verify="required">
-                            <option value="0">个人房东</option>
-                            <option value="1">个人转租</option>
-                            <option value="2">职业房东</option>
+                        <select name="houseContactIdentity" lay-verify="required">
+                            <option value="个人房东">个人房东</option>
+                            <option value="个人转租">个人转租</option>
+                            <option value="职业房东">职业房东</option>
                         </select>
                     </div>
                 </div>
@@ -189,8 +192,15 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">联系人手机:</label>
                     <div class="layui-input-inline">
-                        <input type="tel" name="phone" lay-verify="required|phone" autocomplete="off"
+                        <input type="tel" name="houseContactPhone" lay-verify="required|phone" autocomplete="off"
                                class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item" style="float: right">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
 
@@ -201,8 +211,17 @@
 
 </div>
 </body>
-
+<script src="login/vendor/jquery/jquery-3.2.1.min.js"></script>
+<script src="login/vendor/jquery/jquery.cookie.js"></script>
+<script src="login/vendor/jquery/jquery.form.min.js"></script>
+<script src="js/main.js"></script>
 <script>
+    window.onload =function (){
 
+        if ($.cookie('user_id') == null) {
+            $(location).attr('href', 'login.html');
+            layer.msg("请先登录!");
+        }
+    };
 </script>
 </html>

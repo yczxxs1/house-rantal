@@ -18,21 +18,48 @@
     /*==================================================================
     [ Validate ]*/
     var input = $('.validate-input .input100');
+    $('#login-button').on('click',function(){
 
-    $('.validate-form').on('submit',function(){
-        var check = true;
 
-        for(var i=0; i<input.length; i++) {
-            if(validate(input[i]) == false){
-                showValidate(input[i]);
-                check=false;
-            }
-        }
+        $.post("/user/login",
+            {"userName":input[0].value,
+                "password":input[1].value,
 
-        return check;
+            },
+            function(result){
+                if (result.status==0) {
+                    //跳转页面
+                    $(location).attr('href', 'list.html');
+                    $.cookie('user_id', result.data.userId);
+                }else{
+                    alert(result.data);
+                }
+
+            });
+
     });
 
+    $('#register-button').on('click',function(){
+        if (input[1].value!=input[2].value){
+            alert("两次密码不一致!");
+            return;
+        }
 
+        $.post("/user/register",
+            {"userName":input[0].value,
+                "password":input[1].value,
+            },
+            function(result){
+
+                if (result.status==0) {
+                    //跳转页面
+                    $(location).attr('href', 'login.html');
+                }else{
+                    alert(result.data);
+                }
+            });
+
+    });
     $('.validate-form .input100').each(function(){
         $(this).focus(function(){
            hideValidate(this);
