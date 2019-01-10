@@ -1,7 +1,8 @@
+/*前置语句*/
 create database house_rental;
-
 use house_rental;
 
+/*建表语句*/
 create table user
 (
   user_id     varchar(42) not null
@@ -44,7 +45,7 @@ create table rental_info
   floor_num              int          not null
   comment '总楼层数',
   parking_space          varchar(32)   not null
-  comment '车位0没有1有',
+  comment '车位',
   house_desc             varchar(255) not null
   comment '房源描述',
   house_imgs             varchar(255) not null
