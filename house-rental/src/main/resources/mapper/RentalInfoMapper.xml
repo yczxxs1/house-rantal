@@ -45,15 +45,12 @@
 
       <where>
 
-          <if test="minRent != null and minRent!=''">
-              <![CDATA[ AND house_rent > = #{minRent,jdbcType=VARCHAR}]]>
+          <if test="(minRent != null and minRent!='') or   ( maxRent != null and maxRent!='')">
+
+            and house_rent between #{minRent,jdbcType=VARCHAR} and  #{maxRent,jdbcType=VARCHAR}
 
           </if>
 
-          <if test="maxRent != null and maxRent!=''">
-              <![CDATA[  AND house_rent <=  #{maxRent,jdbcType=VARCHAR}]]>
-
-          </if>
 
           <if test="bedroomNum != null and bedroomNum != '' ">
               <![CDATA[  AND bedroom_num =  #{bedroomNum,jdbcType=VARCHAR}]]>

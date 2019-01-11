@@ -39,7 +39,7 @@
     </fieldset>
 
 
-    <form class="layui-form" action="">
+    <form class="layui-form">
 
 
         <div class="layui-form-item">
@@ -58,7 +58,7 @@
             <div class="layui-inline">
                 <div class="layui-form-mid">厅室:</div>
                 <div class="layui-input-inline" style="width: 100px;">
-                    <select name="bedroomNum" lay-verify="required" id="bedroomNum">
+                    <select name="bedroomNum"  id="bedroomNum">
                         <option value="">请选择</option>
                         <option value="1">1室</option>
                         <option value="2">2室</option>
@@ -70,7 +70,7 @@
             <div class="layui-inline">
                 <div class="layui-form-mid">联系人身份:</div>
                 <div class="layui-input-inline" style="width: 100px;">
-                    <select name="houseContactIdentity" lay-verify="required" id="houseContactIdentity">
+                    <select name="houseContactIdentity"  id="houseContactIdentity">
                         <option value="">请选择</option>
                         <option value="个人房东">个人房东</option>
                         <option value="个人转租">个人转租</option>
@@ -80,7 +80,7 @@
             </div>
 
             <div class="layui-inline" style="float: right">
-                <button class="layui-btn layui-btn-radius layui-btn-normal">查询</button>
+                <button class="layui-btn layui-btn-radius layui-btn-normal" lay-submit lay-filter="formQuery">查询</button>
             </div>
 
         </div>
