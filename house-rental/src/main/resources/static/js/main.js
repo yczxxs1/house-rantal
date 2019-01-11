@@ -1,5 +1,3 @@
-
-
 //nav
 layui.use('element', function () {
     var element = layui.element;
@@ -15,24 +13,24 @@ layui.use('form', function () {
     //监听提交
     form.on('submit(formDemo)', function (data) {
         //layer.msg(JSON.stringify(data.field));
-        var rentInfoData=data.field;
-        rentInfoData.rentalInfoUserId=$.cookie('user_id');
+        var rentInfoData = data.field;
+        rentInfoData.rentalInfoUserId = $.cookie('user_id');
         $.ajax({
             url: "/rentalInfo",
             type: "POST",
             data: rentInfoData,
             dataType: "json",
-            success: function(msg){
-                if(msg.status==0){
+            success: function (msg) {
+                if (msg.status == 0) {
                     $(location).attr('href', 'list.html');
                     layer.msg("发布成功");
 
-                }else {
+                } else {
                     layer.msg("发布失败");
                 }
 
             },
-            error:function (msg) {
+            error: function (msg) {
                 layer.msg("发布失败");
             }
         });
@@ -50,24 +48,25 @@ layui.use('flow', function () {
         , done: function (page, next) { //执行下一页的回调
             var lis = [];
             //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
-            $.get('/rentalInfo/list',
-                {
-                    "bedroomNum": $('#room_num').value,
-                    "houseContactIdentity": $('#houseContactIdentity').value,
-                    "maxRent": $('#price_max').value,
-                    "minRent": $('#price_min').value,
-                    "page": page,
-                    //"rentalInfoUserId":null,
-                    "size": 10
-                },
+                //"rentalInfoUserId":null,
+            var formData={
+                "page":page,
+                "bedroomNum": document.getElementById("bedroomNum").value,
+                "houseContactIdentity":document.getElementById("houseContactIdentity").value,
+                "maxRent":document.getElementById("maxRent").value,
+                "minRent":document.getElementById("minRent").value
+            };
 
-                function (res) {
-
+            $.ajax({
+                url: "/rentalInfo/list",
+                type: "GET",
+                dataType: "json",
+                data:formData,
+                success: function (res) {
                     layui.each(res.data.list, function (index, item) {
                         lis.push(
                             '<li>' +
 
-                            '<div id="rentalInfoId" style="display: none">'+item.rentalInfoId+'</div>'+
                             '<div class="layui-row">' +
                             '<div class="layui-col-xs3">' +
                             '<div class="layui-form-mid"><img class="main-list-img" src="' + item.houseImgs + '" id="demo1">' +
@@ -97,7 +96,7 @@ layui.use('flow', function () {
                             '<div class="layui-form-item" style="margin-bottom: 1px">' +
                             '<div class="layui-inline">' +
                             '<div class="layui-form-mid">' +
-                            '<span>位置:'+item.houseLocation+'</span>' +
+                            '<span>位置:' + item.houseLocation + '</span>' +
                             '</div>' +
                             '</div>' +
                             '</div>' +
@@ -112,7 +111,9 @@ layui.use('flow', function () {
                             '<div class="layui-inline" style="float: right">' +
                             '<button class="layui-btn layui-btn-primary layui-btn-xs" id="edit"><i class="layui-icon layui-icon-edit">更新</i>' +
                             '</button>' +
-                            '<button class="layui-btn layui-btn-primary layui-btn-xs"  onclick="remove(this)" id="remove"><i class="layui-icon layui-icon-delete">删除</i>' +
+                            '<button class="layui-btn layui-btn-primary layui-btn-xs" id="remove" onclick="remove(this)">' +
+                            '<input type="hidden" id="rentalInfoId" value="' + item.rentalInfoId + '">' +
+                            '<i class="layui-icon layui-icon-delete">删除</i>' +
                             '</button>' +
                             '</div>' +
                             '</div>' +
@@ -126,7 +127,10 @@ layui.use('flow', function () {
                     //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
                     //pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
                     next(lis.join(''), page < res.data.lastPage);
-                });
+                }
+
+
+            })
 
 
         }
@@ -154,39 +158,33 @@ $("#postRental").on("click", function () {
 });
 
 
+function remove(a) {
 
-function remove(a){
-    var thisObj=$(a);//js对象转jquery对象
-    var userId=thsiObj.getValue()
-    alert(userId);
-    alert(a);
+
+    var questUrl = "/rentalInfo/" + a.firstElementChild.value + "/remove";
+    $.ajax({
+        url: questUrl,
+        type: "POST",
+        dataType: "json",
+        success: function (msg) {
+            if (msg.status == 0) {
+                layer.msg("删除成功");
+                a.parentElement.parentElement.parentElement.parentElement.remove();
+
+            } else {
+                layer.msg("删除失败");
+            }
+
+        },
+        error: function (msg) {
+            layer.msg("删除失败");
+        }
+    });
+
+
 }
 
-//删除
-$("#remove").on("click", function () {
-
-    alert($("#rentalInfoId").html());
-    /*  var questUrl="";/{rentalInfoId}/remove
-      $.ajax({
-          url: questUrl,
-          type: "POST",
-          data: rentInfoData,
-          dataType: "json",
-          success: function(msg){
-              if(msg.status==0){
-                  $(location).attr('href', 'list.html');
-                  layer.msg("发布成功");
-
-              }else {
-                  layer.msg("发布失败");
-              }
-
-          },
-          error:function (msg) {
-              layer.msg("发布失败");
-          }
-      });*/
 
 
-});
+
 

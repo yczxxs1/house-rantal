@@ -46,11 +46,11 @@
             <div class="layui-inline">
                 <div class="layui-form-mid">租金:</div>
                 <div class="layui-input-inline" style="width: 100px;">
-                    <input type="text" name="price_min" id="price_min" placeholder="￥" autocomplete="off" class="layui-input">
+                    <input type="text" name="minRent" id="minRent" placeholder="￥" autocomplete="off" class="layui-input">
                 </div>
                 <div class="layui-form-mid">-</div>
                 <div class="layui-input-inline" style="width: 100px;">
-                    <input type="text" name="price_max" id="price_max" placeholder="￥" autocomplete="off" class="layui-input">
+                    <input type="text" name="maxRent" id="maxRent" placeholder="￥" autocomplete="off" class="layui-input">
                 </div>
                 <div class="layui-form-mid">元</div>
             </div>
@@ -58,8 +58,8 @@
             <div class="layui-inline">
                 <div class="layui-form-mid">厅室:</div>
                 <div class="layui-input-inline" style="width: 100px;">
-                    <select name="city" lay-verify="required" id="room_num">
-                        <option>请选择</option>
+                    <select name="bedroomNum" lay-verify="required" id="bedroomNum">
+                        <option value="">请选择</option>
                         <option value="1">1室</option>
                         <option value="2">2室</option>
                         <option value="3">3室</option>
@@ -70,8 +70,8 @@
             <div class="layui-inline">
                 <div class="layui-form-mid">联系人身份:</div>
                 <div class="layui-input-inline" style="width: 100px;">
-                    <select name="city" lay-verify="required" id="houseContactIdentity">
-                        <option>请选择</option>
+                    <select name="houseContactIdentity" lay-verify="required" id="houseContactIdentity">
+                        <option value="">请选择</option>
                         <option value="个人房东">个人房东</option>
                         <option value="个人转租">个人转租</option>
                         <option value="职业房东">职业房东</option>
