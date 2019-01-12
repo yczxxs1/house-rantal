@@ -16,7 +16,7 @@
             <li class="layui-nav-item layui-hide-xs">
                 <a href=""><img src="//t.cn/RCzsdCq" class="layui-nav-img">我的</a>
                 <dl class="layui-nav-child">
-                    <dd><a href="javascript:viod(0);">我的发布</a></dd>
+                    <dd><a href="javascript:viod(0);" id="myPost">我的发布</a></dd>
                     <dd><a href="javascript:viod(0);">修改信息</a></dd>
                     <dd><a href="javascript:viod(0);" id="quitFun" >退出登录</a></dd>
                 </dl>
@@ -80,7 +80,7 @@
             </div>
 
             <div class="layui-inline" style="float: right">
-                <button class="layui-btn layui-btn-radius layui-btn-normal" lay-submit lay-filter="formQuery">查询</button>
+                <button  id="queryByCondition" type="button" class="layui-btn layui-btn-radius layui-btn-normal" lay-submit lay-filter="formQuery">查询</button>
             </div>
 
         </div>
@@ -93,11 +93,15 @@
         <legend>房源信息</legend>
     </fieldset>
 
-    <ul id="LAY_demo1">
+    <div id="fk">
+        <ul id="LAY_demo1"> </ul>
+
+    </div>
 
 
 
-    </ul>
+
+
 
 
 </div>
