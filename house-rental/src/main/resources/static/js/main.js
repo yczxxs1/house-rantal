@@ -112,7 +112,7 @@ layui.use('flow', function () {
                                 '</div>' +
                                 '</div>' +
 
-                                '<div class="layui-inline" style="float: right">' +
+                                '<div id="myEditOrRemove" class="layui-inline" style="float: right;display: none">' +
                                 '<button class="layui-btn layui-btn-primary layui-btn-xs" id="edit"><i class="layui-icon layui-icon-edit">更新</i>' +
                                 '</button>' +
                                 '<button class="layui-btn layui-btn-primary layui-btn-xs" id="remove" onclick="remove(this)">' +
@@ -131,6 +131,13 @@ layui.use('flow', function () {
                         //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
                         //pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
                         next(lis.join(''), page < res.data.lastPage);
+                    },
+                    complete: function () {
+
+                         if (options !== undefined && options !== null && options !== "") {
+                             $("#myEditOrRemove").show();
+                         }
+
                     }
                 })
             }
@@ -150,10 +157,10 @@ layui.use('flow', function () {
     //我的
     $("#myPost").on("click", function () {
         $("#LAY_demo1").html("");
-        var userId=$.cookie('user_id');
-        if (userId!= null) {
+        var userId = $.cookie('user_id');
+        if (userId != null) {
             pullDate(userId);
-        }else{
+        } else {
             layer.msg("请先登录!");
         }
 
