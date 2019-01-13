@@ -5,16 +5,20 @@ layui.use('element', function () {
     //…
 });
 
+
 //form
 layui.use('form', function () {
     var form = layui.form;
 
 
+
     //监听提交
-    form.on('submit(formDemo)', function (data) {
+    //发布
+    form.on('submit(rentalCreate)', function (data) {
         //layer.msg(JSON.stringify(data.field));
         var rentInfoData = data.field;
         rentInfoData.rentalInfoUserId = $.cookie('user_id');
+
         $.ajax({
             url: "/rentalInfo",
             type: "POST",
@@ -22,8 +26,10 @@ layui.use('form', function () {
             dataType: "json",
             success: function (msg) {
                 if (msg.status === 0) {
-                    $(location).attr('href', 'list.html');
-                    layer.msg("发布成功！");
+                    layer.alert('发布成功!', {closeBtn: 0}, function (index) {
+                        $(location).attr('href', 'list.html');
+                        layer.close(index);
+                    });
 
                 } else {
                     layer.msg("发布失败！");
@@ -38,7 +44,47 @@ layui.use('form', function () {
         return false;
     });
 
+
+    //更新
+    form.on('submit(rentalEdit)', function (data) {
+        var rentInfoData = data.field;
+        var rentalId = $("#editRentalId").val();
+
+        if (rentalId !== undefined && rentalId !== null && rentalId !== "") {
+            $.ajax({
+                url: "/rentalInfo/" + rentalId + "/edit",
+                type: "POST",
+                data: rentInfoData,
+                dataType: "json",
+                success: function (msg) {
+                    if (msg.status === 0) {
+                        layer.alert('更新成功!', {closeBtn: 0}, function (index) {
+                            $(location).attr('href', 'list.html?userId=' + $.cookie('user_id'));
+                            layer.close(index);
+                        });
+
+                    } else {
+                        layer.msg("更新失败！");
+                    }
+
+                },
+                error: function (msg) {
+                    layer.msg("更新失败！");
+                }
+            });
+
+        }
+        return false;
+    });
+
+
 });
+
+
+
+
+
+
 
 //flow
 layui.use('flow', function () {
@@ -112,8 +158,10 @@ layui.use('flow', function () {
                                 '</div>' +
                                 '</div>' +
 
-                                '<div id="myEditOrRemove" class="layui-inline" style="float: right;display: none">' +
-                                '<button class="layui-btn layui-btn-primary layui-btn-xs" id="edit"><i class="layui-icon layui-icon-edit">更新</i>' +
+                                '<div class="layui-inline myEditOrRemove" style="float: right;display: none">' +
+                                '<button class="layui-btn layui-btn-primary layui-btn-xs" id="edit" onclick="edit(this)">' +
+                                '<input type="hidden" id="rentalInfoId" value="' + item.rentalInfoId + '">' +
+                                '<i class="layui-icon layui-icon-edit">更新</i>' +
                                 '</button>' +
                                 '<button class="layui-btn layui-btn-primary layui-btn-xs" id="remove" onclick="remove(this)">' +
                                 '<input type="hidden" id="rentalInfoId" value="' + item.rentalInfoId + '">' +
@@ -134,9 +182,9 @@ layui.use('flow', function () {
                     },
                     complete: function () {
 
-                         if (options !== undefined && options !== null && options !== "") {
-                             $("#myEditOrRemove").show();
-                         }
+                        if (options !== undefined && options !== null && options !== "") {
+                            $(".myEditOrRemove").show();
+                        }
 
                     }
                 })
@@ -144,8 +192,16 @@ layui.use('flow', function () {
         });
     };
 
+
     //初始加载
-    pullDate();
+    //pullDate();
+    var userId = getUrlParam().userId;
+    if (userId !== undefined && userId !== null && userId !== "") {
+        pullDate($.cookie('user_id'));
+    } else {
+        pullDate();
+    }
+
 
     //条件查询
     $("#queryByCondition").on("click", function () {
@@ -189,6 +245,15 @@ $("#postRental").on("click", function () {
 
 });
 
+
+//返回我的页面
+$("#backMyList").on("click", function () {
+
+    $(location).attr('href', 'list.html?userId=' + $.cookie('user_id'));
+
+});
+
+
 //删除
 function remove(a) {
 
@@ -219,6 +284,39 @@ function remove(a) {
     });
 
 }
+
+
+function edit(a) {
+
+    var rentalId = a.firstElementChild.value;
+    $(location).attr('href', 'postRentalInfo.html?editRentalId=' + rentalId);
+
+}
+
+
+function getUrlParam() {
+    var url = location.search; //获取url中"?"符后的字串
+    var params = {};
+    if (url.indexOf("?") !== -1) {
+        var str = url.substr(1);
+        strs = str.split("&");
+        for (var i = 0; i < strs.length; i++) {
+            params[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+        }
+    }
+    return params;
+}
+
+function renderForm() {
+    layui.use('form', function() {
+        var form = layui.form; //高版本建议把括号去掉，有的低版本，需要加()
+        form.render();
+    });
+}
+
+
+
+
 
 
 
