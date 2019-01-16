@@ -6,6 +6,26 @@
     <script src="layui/layui.js"></script>
     <meta charset="UTF-8">
     <title>我要发布</title>
+    <style>
+        .layui-upload-img{width: 92px; height: 92px; margin: 0 10px 10px 0;}
+
+        .img-preview {
+            position: relative;
+        }
+
+        .img-preview .img-remove {
+            position: absolute;
+            right: 0;
+            width: 15px;
+            font-weight: bolder;
+            color: white;
+            text-align: center;
+            line-height: 15px;
+            margin-right: 10px;
+            background: #2F4056;
+            opacity: .8;
+        }
+    </style>
 </head>
 <body>
 
@@ -156,18 +176,19 @@
                     </div>
                 </div>
 
-                <!--  <div class="layui-form-item">
+                  <div class="layui-form-item">
                       <label class="layui-form-label">上传图片:</label>
+                      <input type="hidden" id="houseImgs" name="houseImgs">
                       <div class="layui-input-block">
                           <div class="layui-upload">
-                              <button class="layui-btn layui-btn-primary layui-btn-radius" id="test2">多图片上传</button>
+                              <button type="button" class="layui-btn layui-btn-primary layui-btn-radius" id="test2">图片上传</button>
                               <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
                                   预览图：
                                   <div class="layui-upload-list" id="demo2"></div>
                               </blockquote>
                           </div>
                       </div>
-                  </div>-->
+                  </div>
 
 
             </div>
@@ -276,6 +297,19 @@
                     $("#parkingSpace").val(data.data.parkingSpace);
                     $("#paymentMethod").val(data.data.paymentMethod);
                     $("#houseLocation").val(data.data.houseLocation);
+
+
+                    var x=data.data.houseImgs.split(";");
+                    for (var i = 0; i < x.length; i++) {
+                        var imgElement = $(['<span class="img-preview">'
+                            , '<img name="houseImg" src="' + imgPreview+x[i] + '" alt="' + x[i]  + '" class="layui-upload-img">'
+                            , '<i class="layui-icon layui-icon-delete img-remove" onclick="removeImg(this)"></i>'
+                            , '</span>'].join(''));
+                        $('#demo2').append(imgElement);
+
+                    }
+
+
                     renderForm();
 
                 },
@@ -294,5 +328,9 @@
             $("#editRental").hide();
         }
     };
+
+    function removeImg(a) {
+        a.parentElement.remove();
+    }
 </script>
 </html>

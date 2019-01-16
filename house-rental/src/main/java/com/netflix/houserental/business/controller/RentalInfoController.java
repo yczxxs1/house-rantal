@@ -47,7 +47,6 @@ public class RentalInfoController {
     public ResultVo<String> postRentalInfo(RentalInfoPostForm rentalInfoPostForm)
             throws Exception {
         RentalInfo rentalInfo=mapperFacade.map(rentalInfoPostForm, RentalInfo.class);
-        rentalInfo.setHouseImgs("/login/images/bg-01.jpg");
         rentalInfo.setHouseType(rentalInfo.getBedroomNum()+"室"+rentalInfo.getLivingRoomNum()+"厅"+rentalInfo.getBathroomNum()+"卫");
         rentalInfoService.postRentalInfo(rentalInfo);
         return ResultUtil.success();

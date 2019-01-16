@@ -41,7 +41,7 @@ public class ControllerAspect {
 		logger.debug("request ip: {}", request.getRemoteAddr());
 		logger.debug("class_method: {}",
 				joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
-		logger.debug("request args: {}", JSON.toJSONString(joinPoint.getArgs()));
+		logger.debug("request args: {}", joinPoint.getArgs());
 	}
 
 	
