@@ -115,10 +115,7 @@
 <script>
     window.onload =function (){
 
-        if ($.cookie('user_id') == null) {
-            $(location).attr('href', 'login.html');
-            layer.msg("请先登录!");
-        }
+        loginValidate();
     };
 
 

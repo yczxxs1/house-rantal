@@ -262,10 +262,7 @@
 
     window.onload = function () {
 
-        if ($.cookie('user_id') == null) {
-            $(location).attr('href', 'login.html');
-            layer.msg("请先登录!");
-        }
+        loginValidate();
 
         var rentalId = getUrlParam().editRentalId;
 
@@ -273,54 +270,8 @@
             $("#createRental").hide();
             $("#editRental").show();
             $("#editRentalId").attr("value", rentalId);
-            //填充页面
-            $.ajax({
-                url: "/rentalInfo/" + rentalId,
-                type: "GET",
-                dataType: "json",
-                success: function (data) {
 
-
-                    $("#bedroomNum").val(data.data.bedroomNum);
-                    $("#bathroomNum").val(data.data.bathroomNum);
-                    $("#elevator").val(data.data.elevator);
-                    $("#floorNum").val(data.data.floorNum);
-                    $("#houseArea").val(data.data.houseArea);
-                    $("#houseContactIdentity").val(data.data.houseContactIdentity);
-                    $("#houseContactName").val(data.data.houseContactName);
-                    $("#houseContactPhone").val(data.data.houseContactPhone);
-                    $("#houseDesc").val(data.data.houseDesc);
-                    $("#houseFloor").val(data.data.houseFloor);
-                    $("#houseName").val(data.data.houseName);
-                    $("#houseRent").val(data.data.houseRent);
-                    $("#livingRoomNum").val(data.data.livingRoomNum);
-                    $("#parkingSpace").val(data.data.parkingSpace);
-                    $("#paymentMethod").val(data.data.paymentMethod);
-                    $("#houseLocation").val(data.data.houseLocation);
-
-
-                    var x=data.data.houseImgs.split(";");
-                    for (var i = 0; i < x.length; i++) {
-                        var imgElement = $(['<span class="img-preview">'
-                            , '<img name="houseImg" src="' + imgPreview+x[i] + '" alt="' + x[i]  + '" class="layui-upload-img">'
-                            , '<i class="layui-icon layui-icon-delete img-remove" onclick="removeImg(this)"></i>'
-                            , '</span>'].join(''));
-                        $('#demo2').append(imgElement);
-
-                    }
-
-
-                    renderForm();
-
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-
-                    layer.alert('请检查链接是否正确!', {closeBtn: 0}, function (index) {
-                        $(location).attr('href', 'list.html?userId=' + $.cookie('user_id'));
-                        layer.close(index);
-                    });
-                }
-            })
+            getDetail(rentalId);
 
         } else {
 
@@ -329,8 +280,6 @@
         }
     };
 
-    function removeImg(a) {
-        a.parentElement.remove();
-    }
+
 </script>
 </html>

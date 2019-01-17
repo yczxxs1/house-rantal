@@ -9,10 +9,17 @@ layui.use('element', function () {
 
 function handleHouseImg(rentInfoData){
     var x=document.getElementsByName("houseImg");
-    for (var i = 0; i < x.length; i++) {
-        rentInfoData.houseImgs=rentInfoData.houseImgs+x[i].alt+";";
+    if(x.length===0){
+        layer.msg('请上传图片！', {icon: 5});
+        return false;
+    }else{
+        for (var i = 0; i < x.length; i++) {
+            rentInfoData.houseImgs=rentInfoData.houseImgs+x[i].alt+";";
+        }
+        rentInfoData.houseImgs=rentInfoData.houseImgs.substring(0,rentInfoData.houseImgs.length-1);
+        return true;
     }
-    rentInfoData.houseImgs=rentInfoData.houseImgs.substring(0,rentInfoData.houseImgs.length-1);
+
 }
 
 //form
@@ -26,29 +33,29 @@ layui.use('form', function () {
         //layer.msg(JSON.stringify(data.field));
         var rentInfoData = data.field;
         rentInfoData.rentalInfoUserId = $.cookie('user_id');
-        handleHouseImg(rentInfoData);
-        $.ajax({
-            url: "/rentalInfo",
-            type: "POST",
-            data: rentInfoData,
-            dataType: "json",
-            success: function (msg) {
-                if (msg.status === 0) {
-                    layer.alert('发布成功!', {closeBtn: 0}, function (index) {
-                        $(location).attr('href', 'list.html');
-                        layer.close(index);
-                    });
+        if(handleHouseImg(rentInfoData)){
+            $.ajax({
+                url: "/rentalInfo",
+                type: "POST",
+                data: rentInfoData,
+                dataType: "json",
+                success: function (msg) {
+                    if (msg.status === 0) {
+                        layer.alert('发布成功!', {closeBtn: 0}, function (index) {
+                            $(location).attr('href', 'list.html');
+                            layer.close(index);
+                        });
 
-                } else {
+                    } else {
+                        layer.msg("发布失败！");
+                    }
+
+                },
+                error: function (msg) {
                     layer.msg("发布失败！");
                 }
-
-            },
-            error: function (msg) {
-                layer.msg("发布失败！");
-            }
-        });
-
+            });
+        }
         return false;
     });
 
@@ -57,8 +64,7 @@ layui.use('form', function () {
     form.on('submit(rentalEdit)', function (data) {
         var rentInfoData = data.field;
         var rentalId = $("#editRentalId").val();
-        handleHouseImg(rentInfoData);
-        if (rentalId !== undefined && rentalId !== null && rentalId !== "") {
+        if (rentalId !== undefined && rentalId !== null && rentalId !== "" && handleHouseImg(rentInfoData)) {
             $.ajax({
                 url: "/rentalInfo/" + rentalId + "/edit",
                 type: "POST",
@@ -116,8 +122,6 @@ layui.use('upload', function () {
             });
         }
         , done: function (res, index, upload) {
-            //var imgUrls = $('#houseImgs').val();
-            //$('#houseImgs').val(imgUrls + res.data + ';');
 
             var imgElement = $(['<span class="img-preview">'
                 , '<img name="houseImg" src="' + imgPreview+res.data + '" alt="' + res.data + '" class="layui-upload-img">'
@@ -292,7 +296,7 @@ $("#quitFun").on("click", function () {
 $("#postRental").on("click", function () {
 
     if ($.cookie('user_id') != null) {
-        $(location).attr('href', 'rentalInfo.html');
+        $(location).attr('href', 'form.html');
     } else {
         layer.msg("请先登录");
     }
@@ -344,7 +348,7 @@ function remove(a) {
 function edit(a) {
 
     var rentalId = a.firstElementChild.value;
-    $(location).attr('href', 'rentalInfo.html?editRentalId=' + rentalId);
+    $(location).attr('href', 'form.html?editRentalId=' + rentalId);
 
 }
 
@@ -370,10 +374,66 @@ function renderForm() {
 }
 
 
+function removeImg(a) {
+    a.parentElement.remove();
+}
+
+function getDetail(rentalId) {
+    //填充页面
+    $.ajax({
+        url: "/rentalInfo/" + rentalId,
+        type: "GET",
+        dataType: "json",
+        success: function (data) {
+
+            $("#bedroomNum").val(data.data.bedroomNum);
+            $("#bathroomNum").val(data.data.bathroomNum);
+            $("#elevator").val(data.data.elevator);
+            $("#floorNum").val(data.data.floorNum);
+            $("#houseArea").val(data.data.houseArea);
+            $("#houseContactIdentity").val(data.data.houseContactIdentity);
+            $("#houseContactName").val(data.data.houseContactName);
+            $("#houseContactPhone").val(data.data.houseContactPhone);
+            $("#houseDesc").val(data.data.houseDesc);
+            $("#houseFloor").val(data.data.houseFloor);
+            $("#houseName").val(data.data.houseName);
+            $("#houseRent").val(data.data.houseRent);
+            $("#livingRoomNum").val(data.data.livingRoomNum);
+            $("#parkingSpace").val(data.data.parkingSpace);
+            $("#paymentMethod").val(data.data.paymentMethod);
+            $("#houseLocation").val(data.data.houseLocation);
+            //填充图片
+            var x=data.data.houseImgs.split(";");
+            for (var i = 0; i < x.length; i++) {
+                var imgElement = $(['<span class="img-preview">'
+                    , '<img name="houseImg" src="' + imgPreview+x[i] + '" alt="' + x[i]  + '" class="layui-upload-img">'
+                    , '<i class="layui-icon layui-icon-delete img-remove" onclick="removeImg(this)"></i>'
+                    , '</span>'].join(''));
+                $('#demo2').append(imgElement);
+
+            }
+            //刷新表格，让select生效
+            renderForm();
+
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+            layer.alert('请检查链接是否正确!', {closeBtn: 0}, function (index) {
+                $(location).attr('href', 'list.html?userId=' + $.cookie('user_id'));
+                layer.close(index);
+            });
+        }
+    })
+}
 
 
+function loginValidate() {
+    if ($.cookie('user_id') == null) {
+        $(location).attr('href', 'login.html');
+        layer.msg("请先登录!");
+    }
 
-
+}
 
 
 
