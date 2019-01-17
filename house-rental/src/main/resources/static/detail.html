@@ -18,7 +18,7 @@
                 <dl class="layui-nav-child">
                     <dd><a href="javascript:viod(0);" id="myPost">我的发布</a></dd>
                     <dd><a href="javascript:viod(0);">修改信息</a></dd>
-                    <dd><a href="javascript:viod(0);" id="quitFun" >退出登录</a></dd>
+                    <dd><a href="javascript:viod(0);" id="quitFun">退出登录</a></dd>
                 </dl>
             </li>
 
@@ -32,8 +32,90 @@
 
 <div class="layui-main">
 
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>房源详情</legend>
+    </fieldset>
 
 
+    <div class="layui-form-item" >
+        <div class="layui-inline">
+            <div class="layui-form-mid">
+                <span class="main-title" id="houseName"> </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-row">
+        <div class="layui-col-xs6" style="height: 500px">
+
+
+            <div class="layui-carousel" id="test1">
+                <div carousel-item id="houseImgs">
+
+
+                </div>
+            </div>
+
+        </div>
+        <div class="layui-col-xs6">
+
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">租金:</label>
+                <div class="layui-form-mid" id="houseRent"></div>
+                <div class="layui-form-mid">元</div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">支付方式:</label>
+                <div class="layui-form-mid" id="paymentMethod"></div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">房屋类型:</label>
+                <div class="layui-form-mid" id="houseType"></div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">面积:</label>
+                <div class="layui-form-mid" id="houseArea"></div>
+                <div class="layui-form-mid">㎡</div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">地址:</label>
+                <div class="layui-form-mid" id="houseLocation"></div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">详细描述:</label>
+                <div class="layui-form-mid" id="houseDesc"></div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">联系人身份:</label>
+                <div class="layui-form-mid" id="houseContactIdentity"></div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">联系人姓名:</label>
+                <div class="layui-form-mid" id="houseContactName"></div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">联系人电话:</label>
+                <div class="layui-form-mid" id="houseContactPhone"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <div>
+
+
+    </div>
 
 
 </div>
@@ -44,8 +126,57 @@
 <script src="login/vendor/jquery/jquery.cookie.js"></script>
 <script src="js/main.js"></script>
 <script>
-    window.onload =function (){
+    window.onload = function () {
         loginValidate();
+
+        var rentalId = getUrlParam().rentalId;
+
+        if (rentalId !== undefined && rentalId !== null && rentalId !== "") {
+
+            $.ajax({
+                url: "/rentalInfo/" + rentalId,
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+
+                    $("#elevator").html(data.data.elevator);
+                    $("#houseArea").html(data.data.houseArea);
+                    $("#houseContactIdentity").html(data.data.houseContactIdentity);
+                    $("#houseType").html(data.data.houseType);
+                    $("#houseContactName").html(data.data.houseContactName);
+                    $("#houseContactPhone").html(data.data.houseContactPhone);
+                    $("#houseDesc").html(data.data.houseDesc);
+                    $("#houseFloor").html(data.data.houseFloor);
+                    $("#houseName").html(data.data.houseName);
+                    $("#houseRent").html(data.data.houseRent);
+                    $("#livingRoomNum").html(data.data.livingRoomNum);
+                    $("#parkingSpace").html(data.data.parkingSpace);
+                    $("#paymentMethod").html(data.data.paymentMethod);
+                    $("#houseLocation").html(data.data.houseLocation);
+
+                    var x=data.data.houseImgs.split(";");
+                    for (var i = 0; i < x.length; i++) {
+                        var imgElement = $( '<div class="layui-this"><img name="houseImg" style="height: 100%;width: 100%" src="' + imgPreview+x[i] + '" alt="' + x[i]  + '"></div>');
+                        $("#houseImgs").append(imgElement);
+
+                    }
+                    //重置轮播
+                    ins.reload();
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+                    layer.alert('该房源不存在!', {closeBtn: 0}, function (index) {
+                        $(location).attr('href', 'list.html');
+                        layer.close(index);
+                    });
+                }
+            })
+
+        }
+
+
+
+
     };
 
 </script>

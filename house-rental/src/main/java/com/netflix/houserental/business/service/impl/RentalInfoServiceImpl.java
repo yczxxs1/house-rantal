@@ -22,7 +22,7 @@ public class RentalInfoServiceImpl implements RentalInfoService {
     }
 
     @Override
-    public void postRentalInfo(RentalInfo rentalInfo, List<File> files) throws Exception {
+    public void postRentalInfo(RentalInfo rentalInfo, List<File> files) {
 
         StringBuilder houseImgs = new StringBuilder();
         for (File file : files) {

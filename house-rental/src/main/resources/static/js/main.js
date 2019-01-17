@@ -123,15 +123,20 @@ layui.use('upload', function () {
         }
         , done: function (res, index, upload) {
 
-            var imgElement = $(['<span class="img-preview">'
-                , '<img name="houseImg" src="' + imgPreview+res.data + '" alt="' + res.data + '" class="layui-upload-img">'
-                , '<i class="layui-icon layui-icon-delete img-remove"></i>'
-                , '</span>'].join(''));
-            imgElement.find('.img-remove').on('click', function () {
-                imgElement.remove();
-                uploadIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
-            });
-            $('#demo2').append(imgElement);
+            if(res.status===0){
+                var imgElement = $(['<span class="img-preview">'
+                    , '<img name="houseImg" src="' + imgPreview+res.data + '" alt="' + res.data + '" class="layui-upload-img">'
+                    , '<i class="layui-icon layui-icon-delete img-remove"></i>'
+                    , '</span>'].join(''));
+                imgElement.find('.img-remove').on('click', function () {
+                    imgElement.remove();
+                    uploadIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                });
+                $('#demo2').append(imgElement);
+            }else{
+                layer.msg("发生错误！",{icon: 5});
+            }
+
             layer.closeAll('loading'); //关闭loading
         }
         , error: function (index, upload) {
@@ -186,7 +191,7 @@ layui.use('flow', function () {
                                 '<div class="layui-form-item" style="margin-bottom: 1px">' +
                                 '<div class="layui-inline">' +
                                 '<div class="layui-form-mid">' +
-                                '<span class="main-title">' + item.houseName + '</span>' +
+                                '<a href="detail.html?rentalId='+item.rentalInfoId +'"><span class="main-title">' + item.houseName + '</span></a>' +
                                 '</div>' +
                                 '</div>' +
                                 '<div class="main-list-right">' +
@@ -285,6 +290,23 @@ layui.use('flow', function () {
 
 });
 
+var ins;
+layui.use('carousel', function(){
+    var carousel = layui.carousel;
+    //建造实例
+    ins = carousel.render({
+        elem: '#test1'
+        ,width: '100%' //设置容器宽度
+        ,height:'100%'
+        ,arrow: 'always' //始终显示箭头
+        //,anim: 'updown' //切换动画方式
+    });
+});
+
+
+
+
+
 //退出登录
 $("#quitFun").on("click", function () {
     $.cookie("user_id", null);
@@ -378,7 +400,7 @@ function removeImg(a) {
     a.parentElement.remove();
 }
 
-function getDetail(rentalId) {
+function getDetailFromForm(rentalId) {
     //填充页面
     $.ajax({
         url: "/rentalInfo/" + rentalId,
@@ -429,8 +451,12 @@ function getDetail(rentalId) {
 
 function loginValidate() {
     if ($.cookie('user_id') == null) {
-        $(location).attr('href', 'login.html');
-        layer.msg("请先登录!");
+
+        layer.alert('请先登录!', {closeBtn: 0}, function (index) {
+            $(location).attr('href', 'login.html');
+            layer.close(index);
+        });
+
     }
 
 }
